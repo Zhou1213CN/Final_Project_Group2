@@ -176,6 +176,9 @@ object main {
       println("Counts = " + iteration + ". number of matches: " + new_matchedCount)
       println("************************************************************")
 
+      //No Augment for log_normal
+      //0.3% for musae_ENGB_edges
+      //2% for rest of the files
       if ((new_matchedCount - matchedCount).asInstanceOf[Float] / new_matchedCount.asInstanceOf[Float] < 0.003) {
         notProgressingStreak += 1
       } else {

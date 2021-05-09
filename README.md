@@ -12,8 +12,6 @@
 | musae_ENGB_edges.csv        | 35324           | 2630             | 7s locally (only Luby’s) <br />20s locally (Luby’s +Augment) |      |
 | log_normal_100.csv          | 2671            | 42               | 3s locally (only Luby’s)                                     |      |
 
-Your goal is to compute a matching as large as possible for each graph. 
-
 ## Discussion of Technicality 
 
 ### 1. Revised Luby's Algorithm
@@ -36,9 +34,15 @@ Then we use another round of aggregate message to deactivate the vertices with r
 
 ### 2. Augmenting Path of Length 3 
 
-By the theorem, while there exists an augmenting path P, we can increase the cardinality of maximal matching by 1 by augmenting P.
+We only use augmenting path part for all the files except the log_normal csv because it contains smaller M and the result increased by augmenting is not obvious.
 
-Based on Professor Su's discussion, by augmenting the paths of length 3 and 5, we can get about 0.8 approximation of maximum matching. Since it is hard to search all augmenting paths in limited time, we only augment Ps with length of 3 here. In the future, we will try to implement a blossom algorithm that includes all augmenting paths.
+### Proof 
+
+By the theorem, while there exists an augmenting path P, we can increase the cardinality of maximal matching by 1 by augmenting P. So we have showed that our augmenting part indeed increases the size of matching.
+
+### Implementation
+
+Based on Professor Su's discussion, by augmenting the paths of length 3 and 5, we can get about 0.8 approximation of maximum matching. Since it is hard to search all augmenting paths in limited time, we only augment Ps with length of 3 here. () In the future, we will try to implement a blossom algorithm that includes all augmenting paths.
 
 We initially planned to randomly label all the vertices with 1,2,3,4 and find augmenting paths which follow 1-2-3-4 with 1-2, 3-4 unmatched and 2-3 matched. However, it is hard to simultaneously identify all these paths using Graph API. After exploration, we fail to think about a good solution. Thanks to the idea of Jien's group, we learn to :
 
@@ -61,7 +65,7 @@ So we are able to implement it with the process below:
 
 6. Repeat 2-5 until the new matched count does not increase by a value compared with the previous iteration
 
-   Usage : We only add the augment part for musae_ENGB_edges.csv with value = 0.3% in step 6.
+   Usage in step 6: Musae_ENGB_edges.csv with value = 0.3%; Rest of files with value =2%
 
 ## **Merits of our algorithm**
 
