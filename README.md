@@ -1,17 +1,70 @@
 # Large Scale Data Processing: Final Project
-## Graph matching
-For the final project, you are provided 6 CSV files, each containing an undirected graph, which can be found [here](https://drive.google.com/file/d/1khb-PXodUl82htpyWLMGGNrx-IzC55w8/view?usp=sharing). The files are as follows:  
+### Group 2 Members : Zehua Zhang, Zheng Zhou
 
-|           File name           |        Number of edges       |
-| ------------------------------| ---------------------------- |
-| com-orkut.ungraph.csv         | 117185083                    |
-| twitter_original_edges.csv    | 63555749                     |
-| soc-LiveJournal1.csv          | 42851237                     |
-| soc-pokec-relationships.csv   | 22301964                     |
-| musae_ENGB_edges.csv          | 35324                        |
-| log_normal_100.csv            | 2671                         |  
+## Graph matching Results
+
+| File name                   | Number of edges | Size of Matching | Running Time                                                 |      |
+| --------------------------- | --------------- | ---------------- | ------------------------------------------------------------ | ---- |
+| com-orkut.ungraph.csv       | 117185083       |                  |                                                              |      |
+| twitter_original_edges.csv  | 63555749        |                  |                                                              |      |
+| soc-LiveJournal1.csv        | 42851237        |                  |                                                              |      |
+| soc-pokec-relationships.csv | 22301964        |                  |                                                              |      |
+| musae_ENGB_edges.csv        | 35324           | 2630             | 7s locally (only Luby’s) <br />20s locally (Luby’s +Augment) |      |
+| log_normal_100.csv          | 2671            | 42               | 3s locally (only Luby’s)                                     |      |
 
 Your goal is to compute a matching as large as possible for each graph. 
+
+## Discussion of Technicality 
+
+### 1. Revised Luby's Algorithm
+
+To get a maximal matching, we modify the bidding variant of Luby's algorithm on the line graph.
+
+1. Generate values for each edges and pass to vertex
+
+We first generate random float numbers for each edges and use one round of aggregate message to send edge values to each vertex. The vertex will take the max between two messages it receives. 
+
+2. Transform edge attribute and deactivate edges
+
+We deactivate and pick an edge into our matching if it is largest at both endpoints.
+
+We intially tried maptriplet and managed to transform each edge attribute, but it cannot change the entire edge's attribute tuple efficiently. So we use triplet.map instead to generate new edges, i.e. transform edges.
+
+3. Deactivate the vertices and inform their neighbors
+
+Then we use another round of aggregate message to deactivate the vertices with respect to the edge values. If two vertices receive the same and the largest edge value, we deactivate the two vertices and their neighbors. 
+
+### 2. Augmenting Path of Length 3 
+
+By the theorem, while there exists an augmenting path P, we can increase the cardinality of maximal matching by 1 by augmenting P.
+
+Based on Professor Su's discussion, by augmenting the paths of length 3 and 5, we can get about 0.8 approximation of maximum matching. Since it is hard to search all augmenting paths in limited time, we only augment Ps with length of 3 here. In the future, we will try to implement a blossom algorithm that includes all augmenting paths.
+
+We initially planned to randomly label all the vertices with 1,2,3,4 and find augmenting paths which follow 1-2-3-4 with 1-2, 3-4 unmatched and 2-3 matched. However, it is hard to simultaneously identify all these paths using Graph API. After exploration, we fail to think about a good solution. Thanks to the idea of Jien's group, we learn to :
+
+1. Let every vertex pick a matched edge with its vertices. 
+2. Similarly, the chosen matched edge with its vertices chooses two free vertices. 
+3. Then matched vertices inform M that whether there is a match between picked-chosen.
+4. Finally we augment the 3-length paths into M.
+
+So we are able to implement it with the process below:
+
+1. We use one round of aggregateMessage to let the edges send values. Each vertex randomly chooses one edge value.
+
+2. Use another round of aggregateMessage to handle the process for the unmatched to pick a matched edge. For each edge whose source vertex is in M and destination vertex is not in M, we generate a random float for its two vertices. For other edges, we generate -1 for their vertices. Each vertex picks the larger edge value. 
+
+3. Similarly with step 2, we can handle the process for the matched to choose the free vertices.
+
+4. From source to destination vertex of matched edges and the reverse, use a round of aggregateMessage again to exchange info and check if both are picked. All the edges are updated. 
+
+5. Use map triplets to update attributes for edges and then update vertices based on the new infos of edges
+
+6. Repeat 2-5 until the new matched count does not increase by a value compared with the previous iteration
+
+   Usage : We only add the augment part for musae_ENGB_edges.csv with value = 0.3% in step 6.
+
+## **Merits of our algorithm**
+
 
 ### Input format
 Each input file consists of multiple lines, where each line contains 2 numbers that denote an undirected edge. For example, the input below is a graph with 3 edges.  
@@ -28,7 +81,7 @@ Your output should be a CSV file listing all of the matched edges, 1 on each lin
 For the final project, you will need to write everything from scratch. Feel free to consult previous projects for ideas on structuring your code. That being said, you are provided a verifier that can confirm whether or not your output is a matching. As usual, you'll need to compile it with
 ```
 sbt clean package
-```  
+```
 The verifier accepts 2 file paths as arguments, the first being the path to the file containing the initial graph and the second being the path to the file containing the matching. It can be ran locally with the following command (keep in mind that your file paths may be different):
 ```
 // Linux
@@ -49,9 +102,6 @@ spark-submit --master "local[*]" --class "final_project.verifier" target/scala-2
   * An estimate of the amount of computation used for each test case. For example, "the program runs for 15 minutes on a 2x4 N1 core CPU in GCP." If you happen to be executing mulitple algorithms on a test case, report the total running time.
   * Description(s) of your approach(es) for obtaining the matchings. It is possible to use different approaches for different cases. Please describe each of them as well as your general strategy if you were to receive a new test case.
   * Discussion about the advantages of your algorithm(s). For example, does it guarantee a constraint on the number of shuffling rounds (say `O(log log n)` rounds)? Does it give you an approximation guarantee on the quality of the matching? If your algorithm has such a guarantee, please provide proofs or scholarly references as to why they hold in your report.
-* A live Zoom presentation during class time on 5/4 or 5/6.
-  * Note that the presentation date is before the final project submission deadline. This means that you could still be working on the project when you present. You may present the approaches you're currently trying. You can also present a preliminary result, like the matchings you have at the moment. After your presentation, you'll be given feedback to help you complete or improve your work.
-  * If any members of your group attend class in a different time zone, you may record and submit your presentation **by midnight on 5/3**.
 
 ## Grading policy
 * Quality of matchings (40%)
@@ -76,9 +126,4 @@ Delete your project's current **README.md** file (the one you're reading right n
 2. In the report, you must include your (and any partner's) full name in addition to any collaborators.
 3. Submit a link to your repo in the Canvas assignment.
 
-## Late submission penalties
-Beginning with the minute after the deadline, your submission will be docked a full letter grade (10%) for every 
-day that it is late. For example, if the assignment is due at 11:59 PM EST on Friday and you submit at 3:00 AM EST on Sunday,
-then you will be docked 20% and the maximum grade you could receive on that assignment is an 80%. 
-Late penalties are calculated from the last commit in the Git log.
-**If you make a commit more than 48 hours after the deadline, you will receive a 0.**
+
