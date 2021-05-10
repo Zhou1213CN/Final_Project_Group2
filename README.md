@@ -16,7 +16,7 @@
 
 ## Discussion of Technicality 
 
-### Revised Luby's Algorithm
+### Revised Luby's Algorithm + Augmenting Path of Length 3
 
 * To get a maximal matching, we modify the bidding variant of Luby's algorithm on the line graph.
 
