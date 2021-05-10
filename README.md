@@ -2,6 +2,7 @@
 ### Group 2 Members : Zehua Zhang, Zheng Zhou
 
 ## Graph matching Results
+The matching results are compressed into Final_Result.Zip.
 
 | File name                   | Number of edges | Size of Matching | Running Time                                                 | Verified      |
 | --------------------------- | --------------- | ---------------- | ------------------------------------------------------------ | ---- |
