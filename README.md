@@ -85,6 +85,12 @@
 
 * Reference : http://www.cs.cmu.edu/~haeupler/15859F14/docs/lecture6.pdf
 
+* Easier implementation
+ * Compared with Israti algorithm, our revised Luby's is easier to implement, following the one we implemented in the last project.
+ * Our revised Luby's algorithm does not create a new line graph which requires too much memory.
+
+
+
 
 
 
