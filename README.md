@@ -76,16 +76,16 @@ The matching results are compressed into Final_Result.Zip.
 
 ## **Merits of our algorithm**
 
-* Since we are modifying the Luby’s variant and employing the same logic, we still expect the algorithm to finish in log(n) rounds. In general, we aggregate the message to the neighbor vertices as we did in finding the MIS, but only take an extra step of reassigning and updating activation status for all the triplets. So it will not change the rounds that it takes to run the algorithms. However, since the way we deactivate the vertex is slightly different from the previously implemented Luby’s, we expect that the rate of deactivating edges would be smaller than calculating MIS (expected to remove ½ edges for each iteration).
-
-* Previously, if we use X = 1 to denote that one vertex will be deactivated, <img src="https://bit.ly/33vsKrK" align="center" border="0" alt=" [P(x=1) \geq \frac{1}{(d(u)+d(v))}]" width="221" height="46" /> , and because of that any vertex can be removed at most once and any edge can be removed twice, we expect numbers of edge removed as <img src="https://bit.ly/33s4IxN" align="center" border="0" alt="\[\frac{1}{2} * \sum (d(u)*P(X{v} =1)+d(v)*P(X{u} =1))\]" width="369" height="43" /> . Finally we expect half of the edge removed for each iteration to achieve log(n) rounds.
-
-* Now, we would expect the possibility of having 2 vertices with the same assigned random float number to be smaller (also biggest among all the neighbors), which means that the rate of removing edges will be slower as well. However, since once we observed such 2 vertices, we could remove all the neighbor edges and the corresponding vertices (endpoints), which would boost the removal rate slightly but not enough to make up for the slowdown. 
-
-* In all, we expect the algorithm still runs with O(log(n)) rounds, but there could be some variations here.
-
-* Reference : http://www.cs.cmu.edu/~haeupler/15859F14/docs/lecture6.pdf
-
+* Running Time Expectation
+    * Since we are modifying the Luby’s variant and employing the same logic, we still expect the algorithm to finish in log(n) rounds. In general, we aggregate the message to the neighbor vertices as we did in finding the MIS, but only take an extra step of reassigning and updating activation status for all the triplets. So it will not change the rounds that it takes to run the algorithms. However, since the way we deactivate the vertex is slightly different from the previously implemented Luby’s, we expect that the rate of deactivating edges would be smaller than calculating MIS (expected to remove ½ edges for each iteration).
+    * Previously, if we use X = 1 to denote that one vertex will be deactivated, <img src="https://bit.ly/33vsKrK" align="center" border="0" alt=" [P(x=1) \geq \frac{1}{(d(u)+d(v))}]" width="221" height="46" /> , and because of that any vertex can be removed at most once and any edge can be removed twice, we expect numbers of edge removed as <img src="https://bit.ly/33s4IxN" align="center" border="0" alt="\[\frac{1}{2} * \sum (d(u)*P(X{v} =1)+d(v)*P(X{u} =1))\]" width="369" height="43" /> . Finally we expect half of the edge removed for each iteration to achieve log(n) rounds.
+    * Now, we would expect the possibility of having 2 vertices with the same assigned random float number to be smaller (also biggest among all the neighbors), which means that the rate of removing edges will be slower as well. However, since once we observed such 2 vertices, we could remove all the neighbor edges and the corresponding vertices (endpoints), which would boost the removal rate slightly but not enough to make up for the slowdown. 
+    * In all, we expect the algorithm still runs with O(log(n)) rounds, but there could be some variations here.
+    * Reference : http://www.cs.cmu.edu/~haeupler/15859F14/docs/lecture6.pdf
+ 
+* Easier implementation
+   * Compared with Israti algorithm, our revised Luby's is easier to implement, following the one we implemented in the last project.
+   * Our revised Luby's algorithm does not create a new line graph which requires too much memory.  
 
 
 ### No template is provided
