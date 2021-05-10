@@ -3,14 +3,14 @@
 
 ## Graph matching Results
 
-| File name                   | Number of edges | Size of Matching | Running Time                                                 |      |
+| File name                   | Number of edges | Size of Matching | Running Time                                                 | Verified      |
 | --------------------------- | --------------- | ---------------- | ------------------------------------------------------------ | ---- |
 | com-orkut.ungraph.csv       | 117185083       |                  |                                                              |      |
-| twitter_original_edges.csv  | 63555749        |90209             |More than 12 hours on GCP customized  2* (2cores 10GB memory) |      |
-| soc-LiveJournal1.csv        | 42851237        |1048121           |More than 12 hours on GCP customized  2* (2cores 10GB memory) |      |
-| soc-pokec-relationships.csv | 22301964        |653796            | 4032s on GCP                                                 |      |
-| musae_ENGB_edges.csv        | 35324           | 2630             | 7s locally (only Luby’s) <br />20s locally (Luby’s +Augment) |      |
-| log_normal_100.csv          | 2671            | 42               | 3s locally (only Luby’s)                                     |      |
+| twitter_original_edges.csv  | 63555749        |90209             |More than 12 hours on GCP customized  2* (2cores 10GB memory) |   Y   |
+| soc-LiveJournal1.csv        | 42851237        |1048121           |More than 12 hours on GCP customized  2* (2cores 10GB memory) |   Y   |
+| soc-pokec-relationships.csv | 22301964        |653796            | 4032s on GCP                                                 |   Y   |
+| musae_ENGB_edges.csv        | 35324           | 2630             | 7s locally (only Luby’s) <br />20s locally (Luby’s +Augment) |   Y   |
+| log_normal_100.csv          | 2671            | 42               | 3s locally (only Luby’s)                                     |   Y  |
 
 
 
