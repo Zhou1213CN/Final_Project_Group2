@@ -62,13 +62,13 @@
 
     2. Use another round of aggregateMessage to handle the process for the unmatched to pick a matched edge. For each edge whose source vertex is in M and destination vertex is not in M, we generate a random float for its two vertices. For other edges, we generate -1 for their vertices. Each vertex picks the larger edge value. 
 
-    3. Similarly with step 2, we can handle the process for the matched to choose the free vertices.
+    3. Similarly with last step, we can handle the process for the matched to choose the free vertices.
 
     4. From source to destination vertex of matched edges and the reverse, use a round of aggregateMessage again to exchange info and check if both are picked. All the edges are updated. 
 
     5. Use map triplets to update attributes for edges and then update vertices based on the new infos of edges
 
-    6. Repeat 2-5 until the new matched count does not increase by a value compared with the previous iteration
+    6. Repeat last four steps until the new matched count does not increase by a value compared with the previous iteration
        (Usage : musae_ENGB_edges.csv with value = 0.3% in step 6; Rest of files value = 2%)
 
        
