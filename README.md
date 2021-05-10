@@ -6,9 +6,9 @@
 | File name                   | Number of edges | Size of Matching | Running Time                                                 |      |
 | --------------------------- | --------------- | ---------------- | ------------------------------------------------------------ | ---- |
 | com-orkut.ungraph.csv       | 117185083       |                  |                                                              |      |
-| twitter_original_edges.csv  | 63555749        |                  |                                                              |      |
-| soc-LiveJournal1.csv        | 42851237        |                  |                                                              |      |
-| soc-pokec-relationships.csv | 22301964        |                  | 4032s on GCP                                                 |      |
+| twitter_original_edges.csv  | 63555749        |90209             |More than 12 hours on GCP customized  2* (2cores 10GB memory) |      |
+| soc-LiveJournal1.csv        | 42851237        |1048121           |More than 12 hours on GCP customized  2* (2cores 10GB memory) |      |
+| soc-pokec-relationships.csv | 22301964        |653796            | 4032s on GCP                                                 |      |
 | musae_ENGB_edges.csv        | 35324           | 2630             | 7s locally (only Luby’s) <br />20s locally (Luby’s +Augment) |      |
 | log_normal_100.csv          | 2671            | 42               | 3s locally (only Luby’s)                                     |      |
 
@@ -77,7 +77,7 @@
 
 * Since we are modifying the Luby’s variant and employing the same logic, we still expect the algorithm to finish in log(n) rounds. In general, we aggregate the message to the neighbor vertices as we did in finding the MIS, but only take an extra step of reassigning and updating activation status for all the triplets. So it will not change the rounds that it takes to run the algorithms. However, since the way we deactivate the vertex is slightly different from the previously implemented Luby’s, we expect that the rate of deactivating edges would be smaller than calculating MIS (expected to remove ½ edges for each iteration).
 
-* Previously, if we use X = 1 to denote that one vertex will be deactivated, \[P(x=1) \geq \frac{1}{(d(u)+d(v))}\] , and because of that any vertex can be removed at most once and any edge can be removed twice, we expect numbers of edge removed as \[\frac{1}{2} * \sum (d(u)*P(X{v} =1)+d(v)*P(X{u} =1))\]. Finally we expect half of the edge removed for each iteration to achieve log(n) rounds.
+* Previously, if we use X = 1 to denote that one vertex will be deactivated, <img src="https://bit.ly/33vsKrK" align="center" border="0" alt=" [P(x=1) \geq \frac{1}{(d(u)+d(v))}]" width="221" height="46" /> , and because of that any vertex can be removed at most once and any edge can be removed twice, we expect numbers of edge removed as <img src="http://www.sciweavers.org/tex2img.php?eq=%5C%5B%5Cfrac%7B1%7D%7B2%7D%20%2A%20%5Csum%20%28d%28u%29%2AP%28X%7Bv%7D%20%3D1%29%2Bd%28v%29%2AP%28X%7Bu%7D%20%3D1%29%29%5C%5D&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt="\[\frac{1}{2} * \sum (d(u)*P(X{v} =1)+d(v)*P(X{u} =1))\]" width="369" height="43" />. Finally we expect half of the edge removed for each iteration to achieve log(n) rounds.
 
 * Now, we would expect the possibility of having 2 vertices with the same assigned random float number to be smaller (also biggest among all the neighbors), which means that the rate of removing edges will be slower as well. However, since once we observed such 2 vertices, we could remove all the neighbor edges and the corresponding vertices (endpoints), which would boost the removal rate slightly but not enough to make up for the slowdown. 
 
