@@ -49,13 +49,13 @@
 
     We initially planned to randomly label all the vertices with 1,2,3,4 and find augmenting paths which 		follow 1-2-3-4 with 1-2, 3-4 unmatched and 2-3 matched. However, it is hard to simultaneously 		identify all these paths using Graph API. After exploration, we fail to think about a good solution. 		Thanks to the idea of Jien's group, we learn to : 
 
-   *		1. Let every vertex pick a matched edge with its vertices. 
+   * * 	1. Let every vertex pick a matched edge with its vertices. 
    
-   *  2. Similarly, the chosen matched edge with its vertices chooses two free vertices. 
+   * *  2. Similarly, the chosen matched edge with its vertices chooses two free vertices. 
 
-   *		3. Then matched vertices inform M that whether there is a match between picked-chosen.
+   *	*	 3. Then matched vertices inform M that whether there is a match between picked-chosen.
 
-   *		4. Finally we augment the 3-length paths into M.
+   *	* 	4. Finally we augment the 3-length paths into M.
 
   
 
